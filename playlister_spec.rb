@@ -1,3 +1,5 @@
+Dir["#{File.dirname(__FILE__)}/lib/*.rb"].each { |f| load(f) }
+
 describe "playlister" do
   it 'Can initialize an Artist' do
     lambda {Artist.new}.should_not raise_error
