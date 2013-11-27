@@ -24,7 +24,7 @@ class Song
   def page
     puts "\n#{name}"
     puts "Artist: #{artist.name}"
-    puts "Genre: #{genre.name}"
+    puts "Genre: #{genre.name.capitalize}"
   end
 
   def self.all

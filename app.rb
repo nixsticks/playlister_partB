@@ -11,10 +11,8 @@ class PlayLister
   def run
     puts welcome_message
     browse
-    loop do
-      puts select_message
-      selector
-    end
+    puts select_message
+    selector
   end
 
   private
@@ -60,8 +58,10 @@ class PlayLister
 
     if artist.nil? && song.nil? && genre.nil?
       puts "\nThat choice does not exist in the database. Please try again."
-      selector
+    else
+      puts select_message
     end
+    selector
   end
 end
 
