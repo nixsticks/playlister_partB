@@ -7,7 +7,7 @@ require './lib/genre'
 class Parser
   attr_accessor :artists, :genres, :entries
 
-  MATCH = /(.*)\s\-\s(.*)\s\[(.*)\]/
+  MATCH = /(?<artist>.*)\s\-\s(?<song>.*)\s\[(?<genre>.*)\]/
 
   def initialize(directory)
     @entries = Dir.entries(directory).select {|f| !File.directory? f}
@@ -17,11 +17,11 @@ class Parser
     entries.each do |entry|
       match = MATCH.match(entry)
 
-      artist = Artist.search(match[1]) || Artist.new.tap {|artist| artist.name = match[1]}
+      artist = Artist.search(match[:artist]) || Artist.new.tap {|artist| artist.name = match[:artist]}
 
       song = Song.new
-      song.name = match[2]
-      song.genre = Genre.search(match[3]) || Genre.new.tap {|genre| genre.name = match[3]}
+      song.name = match[:song]
+      song.genre = Genre.search(match[:genre]) || Genre.new.tap {|genre| genre.name = match[:genre]}
 
       artist.add_song(song)
     end
