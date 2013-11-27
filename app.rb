@@ -21,7 +21,9 @@ class PlayLister
   end
 
   def get_input
-    gets.chomp.downcase
+    input = gets.chomp.downcase
+    exit if input == "exit"
+    input
   end
 
   def browse
@@ -30,8 +32,6 @@ class PlayLister
       Artist.index
     when "genre"
       Genre.index
-    when "exit"
-      exit
     else
       puts "Sorry, I didn't understand you."
       browse
@@ -44,8 +44,6 @@ class PlayLister
 
   def selector
     choice = get_input
-
-    exit if choice == "exit"
 
     artist = Artist.search(choice)
     artist.page unless artist.nil?
