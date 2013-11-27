@@ -19,8 +19,9 @@ class Genre
   
   def page
     puts "\n#{name.capitalize}: #{artists.size} Artists, #{songs.size} Songs\n\n"
-    artists.each do |artist|
-      print "#{artist.name}: "
+    PlayLister.memoize(artists)
+    artists.each_with_index do |artist, i|
+      print "#{i+1}. #{artist.name}: "
       artist.songs.each {|song| puts "#{song.name}" if song.genre == self}
     end
   end
@@ -35,8 +36,9 @@ class Genre
 
   def self.index
     puts
-    all_genres = genres.sort_by {|genre| genre.songs.size}
-    genres.each do |genre|
+    sorted_genres = genres.sort_by {|genre| genre.songs.size}
+    PlayLister.memoize(sorted_genres)
+    sorted_genres.each do |genre|
       puts "#{genre.name.capitalize}: #{genre.songs.size} Songs, #{genre.artists.size} Artists"
     end
   end

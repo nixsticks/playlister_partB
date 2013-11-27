@@ -1,6 +1,10 @@
 require './parser'
 
 class PlayLister
+  class << self
+    attr_accessor :current_list
+  end
+
   attr_accessor :parser
 
   def initialize(parser)
@@ -10,9 +14,15 @@ class PlayLister
 
   def run
     puts welcome_message
-    browse
-    puts select_message
-    selector
+    loop do
+      browse
+      puts select_message
+      selector
+    end
+  end
+
+  def self.memoize(list)
+    @current_list = list
   end
 
   private
@@ -22,7 +32,7 @@ class PlayLister
 
   def get_input
     input = gets.chomp.downcase
-    exit if input == "exit"
+    exit if input.match(/^e(xit)?$/)
     input
   end
 
@@ -39,11 +49,16 @@ class PlayLister
   end
 
   def select_message
-    "\nType the name of an artist, song, or genre to go to its page."
+    "\nType the name or number of any artist, song, or genre shown above to go to its page.\nType artist or genre to browse by artist or genre."
   end
 
   def selector
     choice = get_input
+
+    PlayLister::current_list[choice.to_i - 1].page if choice.match(/^\d+$/) && PlayLister::current_list[choice.to_i - 1]
+    
+    Artist.index if choice == "artist"
+    Genre.index if choice == "genre"
 
     artist = Artist.search(choice)
     artist.page unless artist.nil?
@@ -54,11 +69,12 @@ class PlayLister
     genre = Genre.search(choice)
     genre.page unless genre.nil?
 
-    if artist.nil? && song.nil? && genre.nil?
-      puts "\nThat choice does not exist in the database. Please try again."
+    if artist.nil? && song.nil? && genre.nil? && PlayLister::current_list[choice.to_i - 1].nil?
+      puts "\nThat choice is not included in the list above. Please try again."
     else
       puts select_message
     end
+
     selector
   end
 end
