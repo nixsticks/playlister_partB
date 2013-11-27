@@ -1,5 +1,3 @@
-require 'ruby-debug'
-require 'awesome_print'
 require './lib/song'
 require './lib/artist'
 require './lib/genre'

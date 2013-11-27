@@ -1,5 +1,4 @@
 require './parser'
-require 'ruby-debug'
 
 class PlayLister
   attr_accessor :parser
