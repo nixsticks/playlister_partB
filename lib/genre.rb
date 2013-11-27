@@ -39,6 +39,5 @@ class Genre
     genres.each do |genre|
       puts "#{genre.name.capitalize}: #{genre.songs.size} Songs, #{genre.artists.size} Artists"
     end
-    puts
   end
 end

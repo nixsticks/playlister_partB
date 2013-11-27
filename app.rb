@@ -12,8 +12,8 @@ class PlayLister
   def run
     puts welcome_message
     browse
-    puts select_message
     loop do
+      puts select_message
       selector
     end
   end
@@ -42,7 +42,7 @@ class PlayLister
   end
 
   def select_message
-    "Type the name of an artist, song, or genre to go to its page."
+    "\nType the name of an artist, song, or genre to go to its page."
   end
 
   def selector
@@ -60,11 +60,9 @@ class PlayLister
     genre.page unless genre.nil?
 
     if artist.nil? && song.nil? && genre.nil?
-      puts "That choice does not exist in the database. Please try again."
+      puts "\nThat choice does not exist in the database. Please try again."
       selector
     end
-
-    puts "\n" + select_message
   end
 end
 

@@ -53,6 +53,5 @@ class Artist
       puts "#{artist.name} - #{artist.songs.size} Songs"
     end
     puts "\nTotal: #{artists.size} Artists"
-    puts
   end
 end
