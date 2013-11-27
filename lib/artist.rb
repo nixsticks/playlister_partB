@@ -1,6 +1,8 @@
-require 'ruby-debug'
+require_relative "./searchable"
 
 class Artist
+  extend Searchable
+
   attr_accessor :name, :songs
 
   @artists = []
@@ -17,6 +19,7 @@ class Artist
   def add_song(song)
     songs << song
     song.genre.artists << self if song.genre && song.genre.artists.include?(self) == false
+    song.artist = self
   end
 
   def genres
@@ -25,6 +28,11 @@ class Artist
 
   def songs_count
     songs.size
+  end
+
+  def page
+    puts "\n#{name} - #{songs.size} Songs"
+    songs.each_with_index {|song, i| puts "#{i+1}. #{song.name} (#{song.genre.name})"}
   end
 
   def self.count
@@ -37,5 +45,14 @@ class Artist
 
   def self.reset_artists
     artists.clear
+  end
+
+  def self.index
+    puts
+    artists.each do |artist|
+      puts "#{artist.name} - #{artist.songs.size} Songs"
+    end
+    puts "\nTotal: #{artists.size} Artists"
+    puts
   end
 end

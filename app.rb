@@ -2,79 +2,71 @@ require './parser'
 require 'ruby-debug'
 
 class PlayLister
-  attr_reader :parser
+  attr_accessor :parser
 
   def initialize(parser)
-    @parser = parser.run
+    @parser = parser
+    @parser.parse
   end
 
   def run
-    puts browse_message
+    puts welcome_message
     browse
+    puts select_message
+    loop do
+      selector
+    end
   end
 
   private
+  def welcome_message
+    "Welcome. Browse by artist or genre? (Type exit to exit at any time.)"
+  end
 
   def get_input
     gets.chomp.downcase
   end
 
-  def browse_message
-    "Browse by artist or genre"
-  end
-
   def browse
     case get_input
     when "artist"
-      print_artists
+      Artist.index
     when "genre"
-      print_genres
+      Genre.index
+    when "exit"
+      exit
     else
       puts "Sorry, I didn't understand you."
       browse
     end
   end
 
-  def print_artists
-    Artist::artists.each {|artist| puts "Artist: #{artist.name}, Song Count: #{artist.songs.size}"}
-    puts "Total Artists: #{Artist::artists.size}"
-    puts "\nSelect Artist"
-    print_artist(select_artist)
+  def select_message
+    "Type the name of an artist, song, or genre to go to its page."
   end
 
-  def select_artist
-    desired_artist = get_input
-    Artist::artists.select{|artist| desired_artist == artist.name.downcase}[0]
-  end
+  def selector
+    choice = get_input
 
-  def print_artist(artist)
-    puts
-    puts "#{artist.name} - #{artist.songs.size} Songs"
-    artist.songs.each {|song| puts "#{song.name} - #{song.genre.name.capitalize}"}
-  end
+    exit if choice == "exit"
 
-  def print_genres
-    Genre::genres.sort_by {|genre| genre.songs.size}
-    Genre::genres.each {|genre| puts "#{genre.name.capitalize} - #{genre.songs.size} Songs, #{genre.artists.size} Artists"}
-    puts "\nSelect Genre"
-    print_genre(select_genre)
-  end
+    artist = Artist.search(choice)
+    artist.page unless artist.nil?
 
-  def select_genre
-    desired_genre = get_input
-    Genre::genres.select{|genre| desired_genre == genre.name.downcase}[0]
-  end
+    song = Song.search(choice)
+    song.page unless song.nil?
 
-  def print_genre(genre)
-    puts "#{genre.name.capitalize}"
-    genre.artists.each_with_index do |artist, index|
-      print "#{index + 1}. #{artist.name} - "
-      artist.songs.each {|song| print "#{song.name}\n"}
+    genre = Genre.search(choice)
+    genre.page unless genre.nil?
+
+    if artist.nil? && song.nil? && genre.nil?
+      puts "That choice does not exist in the database. Please try again."
+      selector
     end
-  end
 
-  
+    puts "\n" + select_message
+  end
 end
 
-play = PlayLister.new(Parser.new("data"))
-play.run
+playlist = PlayLister.new(Parser.new("data"))
+playlist.run
