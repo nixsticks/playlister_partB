@@ -1,8 +1,10 @@
-require_relative './genre'
 require_relative './searchable'
+require_relative "./classmethods"
 
 class Song
   extend Searchable
+  extend ClassMethods
+
   attr_accessor :name, :artist
   attr_reader :genre
 
@@ -25,9 +27,5 @@ class Song
     puts "\n#{name}"
     puts "Artist: #{artist.name}"
     puts "Genre: #{genre.name.capitalize}"
-  end
-
-  def self.all
-    songs
   end
 end

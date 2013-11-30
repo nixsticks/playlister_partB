@@ -1,7 +1,9 @@
 require_relative "./searchable"
+require_relative "./classmethods"
 
 class Artist
   extend Searchable
+  extend ClassMethods
 
   attr_accessor :name, :songs
 
@@ -32,25 +34,11 @@ class Artist
 
   def page
     puts "\n#{name} - #{songs.size} Songs"
-    PlayLister.memoize(songs)
     songs.each_with_index {|song, i| puts "#{i+1}. #{song.name} (#{song.genre.name})"}
-  end
-
-  def self.count
-    artists.size
-  end
-
-  def self.all
-    artists
-  end
-
-  def self.reset_artists
-    artists.clear
   end
 
   def self.index
     puts
-    PlayLister.memoize(artists)
     artists.each_with_index do |artist, i|
       puts "#{i + 1}. #{artist.name} - #{artist.songs.size} Songs"
     end

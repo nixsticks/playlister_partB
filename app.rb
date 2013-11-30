@@ -49,14 +49,12 @@ class PlayLister
   end
 
   def select_message
-    "\nType the name or number of any artist, song, or genre shown above to go to its page.\nType artist or genre to browse by artist or genre."
+    "\nType the name of any artist, song, or genre shown above to go to its page.\nType artist or genre to browse by artist or genre."
   end
 
   def selector
     choice = get_input
 
-    PlayLister::current_list[choice.to_i - 1].page if choice.match(/^\d+$/) && PlayLister::current_list[choice.to_i - 1]
-    
     Artist.index if choice == "artist"
     Genre.index if choice == "genre"
 
@@ -69,7 +67,7 @@ class PlayLister
     genre = Genre.search(choice)
     genre.page unless genre.nil?
 
-    if artist.nil? && song.nil? && genre.nil? && PlayLister::current_list[choice.to_i - 1].nil?
+    if artist.nil? && song.nil? && genre.nil?
       puts "\nThat choice is not included in the list above. Please try again."
     else
       puts select_message

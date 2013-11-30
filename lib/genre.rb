@@ -1,7 +1,10 @@
 require_relative "./searchable"
+require_relative "./classmethods"
+require 'ruby-debug'
 
 class Genre
   extend Searchable
+  extend ClassMethods
 
   attr_accessor :name, :songs, :artists
 
@@ -19,26 +22,16 @@ class Genre
   
   def page
     puts "\n#{name.capitalize}: #{artists.size} Artists, #{songs.size} Songs\n\n"
-    PlayLister.memoize(artists)
     artists.each_with_index do |artist, i|
       print "#{i+1}. #{artist.name}: "
       artist.songs.each {|song| puts "#{song.name}" if song.genre == self}
     end
   end
 
-  def self.all
-    genres
-  end
-
-  def self.reset_genres
-    genres.clear
-  end
-
   def self.index
     puts
     sorted_genres = genres.sort_by {|genre| genre.songs.size}
-    PlayLister.memoize(sorted_genres)
-    sorted_genres.each do |genre|
+    sorted_genres.reverse.each do |genre|
       puts "#{genre.name.capitalize}: #{genre.songs.size} Songs, #{genre.artists.size} Artists"
     end
   end
