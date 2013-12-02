@@ -77,5 +77,5 @@ class PlayLister
   end
 end
 
-playlist = PlayLister.new(Parser.new("data"))
+playlist = PlayLister.new(Parser.new("../data"))
 playlist.run

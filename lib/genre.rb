@@ -1,6 +1,5 @@
-require_relative "./searchable"
-require_relative "./classmethods"
-require 'ruby-debug'
+require "./searchable"
+require "./classmethods"
 
 class Genre
   extend Searchable

@@ -1,5 +1,5 @@
-require_relative './searchable'
-require_relative "./classmethods"
+require './searchable'
+require "./classmethods"
 
 class Song
   extend Searchable
