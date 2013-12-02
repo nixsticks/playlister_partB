@@ -71,7 +71,7 @@ class PlayLister
   end
 
   def exists?(choice)
-    Artist.search(choice) || Song.search(choice) || Genre.search(choice) || (PlayLister.current_list[choice.to_i - 1] if /\d+/ =~ choice)
+    (PlayLister.current_list[choice.to_i - 1] if /\d+/ =~ choice) || Artist.search(choice) || Song.search(choice) || Genre.search(choice) # PlayLister.search(choice) 
   end
 end
 
