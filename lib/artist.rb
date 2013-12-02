@@ -35,6 +35,7 @@ class Artist
   def page
     puts "\n#{name} - #{songs.size} Songs"
     songs.each_with_index {|song, i| puts "#{i+1}. #{song.name} (#{song.genre.name})"}
+    PlayLister.memoize(songs)
   end
 
   def self.index
@@ -43,5 +44,6 @@ class Artist
       puts "#{i + 1}. #{artist.name} - #{artist.songs.size} Songs"
     end
     puts "\nTotal: #{artists.size} Artists"
+    PlayLister.memoize(artists)
   end
 end

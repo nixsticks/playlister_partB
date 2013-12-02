@@ -14,13 +14,14 @@ class Database
   def parse
     files.each do |file|
       match = MATCH.match(file)
-
-      artist = Artist.search(match[:artist]) || Artist.new.tap {|artist| artist.name = match[:artist]}
-
-      song = Song.new.tap {|song| song.name = match[:song]}
-      song.genre = Genre.search(match[:genre]) || Genre.new.tap {|genre| genre.name = match[:genre]}
-
+      artist = exists_or_create(match[:artist], Artist)
+      song = exists_or_create(match[:song], Song)
+      song.genre = exists_or_create(match[:genre], Genre)
       artist.add_song(song)
     end
+  end
+
+  def exists_or_create(match, class_name)
+    class_name.search(match) || class_name.new.tap {|object| object.name = match}
   end
 end

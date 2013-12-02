@@ -25,13 +25,15 @@ class Genre
       print "#{i+1}. #{artist.name}: "
       artist.songs.each {|song| puts "#{song.name}" if song.genre == self}
     end
+    PlayLister.memoize(artists)
   end
 
   def self.index
     puts
-    sorted_genres = genres.sort_by {|genre| genre.songs.size}
-    sorted_genres.reverse.each do |genre|
-      puts "#{genre.name.capitalize}: #{genre.songs.size} Songs, #{genre.artists.size} Artists"
+    sorted_genres = genres.reverse.sort_by {|genre| genre.songs.size}
+    sorted_genres.each_with_index do |genre, i|
+      puts "#{i + 1}. #{genre.name.capitalize}: #{genre.songs.size} Songs, #{genre.artists.size} Artists"
     end
+    PlayLister.memoize(sorted_genres)
   end
 end

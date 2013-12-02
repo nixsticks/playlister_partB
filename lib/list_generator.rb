@@ -1,3 +1,0 @@
-module ListGenerator
-  
-end

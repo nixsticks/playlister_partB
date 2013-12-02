@@ -1,6 +1,10 @@
 require_relative 'parser'
 
 class PlayLister
+
+  extend Searchable
+  extend ClassMethods 
+
   class << self
     attr_accessor :current_list
   end
@@ -14,11 +18,9 @@ class PlayLister
 
   def run
     puts welcome_message
-    loop do
-      browse
-      puts select_message
-      selector
-    end
+    browse
+    puts select_message
+    selector
   end
 
   def self.memoize(list)
@@ -32,8 +34,7 @@ class PlayLister
 
   def get_input
     input = gets.chomp.downcase
-    exit if input.match(/^e(xit)?$/)
-    input
+    input.match(/^e(xit)?$/) ? exit : input
   end
 
   def browse
@@ -49,31 +50,28 @@ class PlayLister
   end
 
   def select_message
-    "\nType the name of any artist, song, or genre shown above to go to its page.\nType artist or genre to browse by artist or genre."
+    "\nType the name or number of any artist, song, or genre shown above to go to its page.\nType artist or genre to browse by artist or genre."
   end
 
   def selector
     choice = get_input
 
-    Artist.index if choice == "artist"
-    Genre.index if choice == "genre"
-
-    artist = Artist.search(choice)
-    artist.page unless artist.nil?
-
-    song = Song.search(choice)
-    song.page unless song.nil?
-
-    genre = Genre.search(choice)
-    genre.page unless genre.nil?
-
-    if artist.nil? && song.nil? && genre.nil?
-      puts "\nThat choice is not included in the list above. Please try again."
-    else
+    if /artist|genre/ =~ choice
+      Artist.index if choice == "artist"
+      Genre.index if choice == "genre"
       puts select_message
+    elsif exists?(choice)
+      exists?(choice).page
+      puts select_message
+    else
+      puts "\nThat choice is not included in the list above. Please try again."
     end
 
     selector
+  end
+
+  def exists?(choice)
+    Artist.search(choice) || Song.search(choice) || Genre.search(choice) || (PlayLister.current_list[choice.to_i - 1] if /\d+/ =~ choice)
   end
 end
 
