@@ -1,4 +1,6 @@
-Dir["#{File.dirname(__FILE__)}/lib/*.rb"].each { |f| load(f) }
+require_relative '../lib/artist'
+require_relative '../lib/song'
+require_relative '../lib/genre'
 
 describe "playlister" do
   it 'Can initialize an Artist' do
@@ -18,12 +20,12 @@ describe "playlister" do
   end
 
   it 'The Artist class can reset the artists that have been created' do
-    lambda {Artist.reset_artists}.should_not raise_error
+    lambda {Artist.reset}.should_not raise_error
     Artist.count.should eq(0)
   end
 
   it 'The Artist class can keep track of artists as they are created' do
-    Artist.reset_artists
+    Artist.reset
     artist = Artist.new
     Artist.all.should include(artist)
   end
@@ -116,7 +118,7 @@ describe "playlister" do
 
   # Same behavior as Artists
   it 'The Genre class can keep track of all created genres' do
-    Genre.reset_genres # You must implement a method like this
+    Genre.reset # You must implement a method like this
     genres = [1..5].collect do |i|
       Genre.new
     end

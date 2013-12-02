@@ -1,15 +1,15 @@
-require './parser'
+require_relative 'parser'
 
 class PlayLister
   class << self
     attr_accessor :current_list
   end
 
-  attr_accessor :parser
+  attr_accessor :database
 
-  def initialize(parser)
-    @parser = parser
-    @parser.parse
+  def initialize(database)
+    @database = database
+    @database.parse
   end
 
   def run
@@ -77,5 +77,5 @@ class PlayLister
   end
 end
 
-playlist = PlayLister.new(Parser.new("data"))
+playlist = PlayLister.new(Database.new("../data"))
 playlist.run

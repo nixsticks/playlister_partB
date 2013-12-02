@@ -1,5 +1,5 @@
-require_relative "./searchable"
-require_relative "./classmethods"
+require_relative 'searchable'
+require_relative 'classmethods'
 
 class Artist
   extend Searchable
